@@ -1,25 +1,27 @@
-/**
- * @license
- * Copyright 2021 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
+// import { hmrPlugin, presets } from '@open-wc/dev-server-hmr';
 
-import {legacyPlugin} from '@web/dev-server-legacy';
+/** Use Hot Module replacement by adding --hmr to the start command */
+const hmr = process.argv.includes('--hmr');
 
-const mode = process.env.MODE || 'dev';
-if (!['dev', 'prod'].includes(mode)) {
-  throw new Error(`MODE must be "dev" or "prod", was "${mode}"`);
-}
+export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
+  open: '/demo/',
+  /** Use regular watch mode if HMR is not enabled. */
+  watch: !hmr,
+  /** Resolve bare module imports */
+  nodeResolve: {
+    exportConditions: ['browser', 'development'],
+  },
 
-export default {
-  nodeResolve: {exportConditions: mode === 'dev' ? ['development'] : []},
-  preserveSymlinks: true,
+  /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
+  // esbuildTarget: 'auto'
+
+  /** Set appIndex to enable SPA routing */
+  // appIndex: 'demo/index.html',
+
   plugins: [
-    legacyPlugin({
-      polyfills: {
-        // Manually imported in index.html file
-        webcomponents: false,
-      },
-    }),
+    /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
+    // hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.lit] }),
   ],
-};
+
+  // See documentation for all available options
+});
