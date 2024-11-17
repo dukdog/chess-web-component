@@ -1,5 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
+import { Board } from './board.js';
+import { Color, colorConverter } from './domain.js';
 
 export class DukdogChess extends LitElement {
   static styles = css`
@@ -10,7 +12,7 @@ export class DukdogChess extends LitElement {
     }
   `;
 
-  @property({ type: String }) header = 'Hey there';
+  @property({ type: Color, converter: colorConverter }) pointOfView = Color.White;
 
   @property({ type: Number }) counter = 5;
 
@@ -19,9 +21,6 @@ export class DukdogChess extends LitElement {
   }
 
   render() {
-    return html`
-      <h2>${this.header} Nr. ${this.counter}!</h2>
-      <button @click=${this.__increment}>increment</button>
-    `;
+    return Board({ pointOfView: this.pointOfView });
   }
 }

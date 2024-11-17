@@ -19,9 +19,7 @@
     const header = 'Hello owc World!';
     render(
       html`
-        <dukdog-chess .header=${header}>
-          some light-dom
-        </dukdog-chess>
+        <dukdog-chess pointOfView="black"></dukdog-chess>
       `,
       document.querySelector('#demo')
     );
